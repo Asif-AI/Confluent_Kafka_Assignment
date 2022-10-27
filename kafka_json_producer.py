@@ -10,17 +10,17 @@ from confluent_kafka.schema_registry.json_schema import JSONSerializer
 import pandas as pd
 from typing import List
 
-FILE_PATH = "D:\confluent_kafka\kafka_assignment\restaurant_orders.csv"
-columns:[""]
+FILE_PATH = "restaurant_orders.csv"
+columns = ['order_number', 'order_date', 'item_name', 'quantity', 'product_price', 'total_products']
 
-API_KEY = 'VFCLFY4ZOYJFROUT'
+API_KEY = '35CPMFTMDBGARQ6X'
 ENDPOINT_SCHEMA_URL  = 'https://psrc-nx65v.us-east-2.aws.confluent.cloud'
-API_SECRET_KEY = '6XKKVZCAUpMTJKTm2NI2vRz6qDfCskw9X2QZ+HQ+x2luAyMKBTw+sQwmQOCrQbr+'
+API_SECRET_KEY = 'ux78BPsvJYD7jdeVTJi3cn2FmAuUeAKJd7KWadR81ohJ3gUi8c2yEj28FaoHOI9t'
 BOOTSTRAP_SERVER = 'pkc-ymrq7.us-east-2.aws.confluent.cloud:9092'   
 SECURITY_PROTOCOL = 'SASL_SSL'
 SSL_MACHENISM = 'PLAIN'
-SCHEMA_REGISTRY_API_KEY = 'MKY3GFEUFTPVGDM2'
-SCHEMA_REGISTRY_API_SECRET = '6PYm3BH45/VIBmVIM/48v6GzArvkzCD0aUpjfKAnF7vmscTAqBhrH0iwBPrA5Mtj'
+SCHEMA_REGISTRY_API_KEY = 'SGLIA3LWLVLT5VZD'
+SCHEMA_REGISTRY_API_SECRET = 'S8D9svNaMYPGGzEAIDuxlMKqFO+myBMQ+Hs/CEZVKxoWS4NOIodB8yfOvJF1Hty5'
 
 
 def sasl_conf():
@@ -45,7 +45,7 @@ def schema_config():
     }
 
 
-class order:   
+class Order:   
     def __init__(self,record:dict):
         for k,v in record.items():
             setattr(self,k,v)
@@ -54,21 +54,21 @@ class order:
    
     @staticmethod
     def dict_to_order(data:dict,ctx):
-        return order(record=data)
+        return Order(record=data)
 
     def __str__(self):
         return f"{self.record}"
 
 
-def get_restaurent_order(file_path):
+def get_order_instance(file_path):
     df=pd.read_csv(file_path)
-    orders:List[order]=[]
+    orders: List[Order] = []
     for data in df.values:
-        order=order(dict(zip(columns,data)))
-        order.append(order)
+        order=Order(dict(zip(columns,data)))
+        orders.append(order)
         yield order
 
-def order_to_dict(order:order, ctx):
+def order_to_dict(order:Order, ctx):
     """
     Returns a dict representation of a User instance for serialization.
     Args:
@@ -102,7 +102,7 @@ def main(topic):
 
     schema_registry_conf = schema_config()
     schema_registry_client = SchemaRegistryClient(schema_registry_conf)
-    schema_str = schema_registry_client.get_latest_version('restaurent-take-away-data').schema.schema.str
+    schema_str = schema_registry_client.get_latest_version('restaurant-take-away-data-value').schema.schema_str
 
     string_serializer = StringSerializer('utf_8')
     json_serializer = JSONSerializer(schema_str, schema_registry_client, order_to_dict)
@@ -114,8 +114,7 @@ def main(topic):
         # Serve on_delivery callbacks from previous calls to produce()
     producer.poll(0.0)
     try:
-        for order in get_restaurent_order(file_path=FILE_PATH):
-
+        for order in get_order_instance(file_path=FILE_PATH):
             print(order)
             producer.produce(topic=topic,
                             key=string_serializer(str(uuid4()), order_to_dict),
@@ -131,4 +130,4 @@ def main(topic):
     print("\nFlushing records...")
     producer.flush()
 
-main("topic")
+main("restaurant-take-away-data")

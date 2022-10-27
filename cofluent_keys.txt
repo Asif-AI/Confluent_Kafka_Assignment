@@ -1,10 +1,11 @@
 === Confluent Cloud API key: lkc-o3o5zo ===
 
+
 API key:
-VFCLFY4ZOYJFROUT
+35CPMFTMDBGARQ6X
 
 API secret:
-6XKKVZCAUpMTJKTm2NI2vRz6qDfCskw9X2QZ+HQ+x2luAyMKBTw+sQwmQOCrQbr+
+ux78BPsvJYD7jdeVTJi3cn2FmAuUeAKJd7KWadR81ohJ3gUi8c2yEj28FaoHOI9t
 
 Bootstrap server:
 pkc-ymrq7.us-east-2.aws.confluent.cloud:9092
@@ -14,7 +15,7 @@ ENDPOINT_SCHEMA_URL= https://psrc-nx65v.us-east-2.aws.confluent.cloud
 schema registry 
  
 API key:
-MKY3GFEUFTPVGDM2
+SGLIA3LWLVLT5VZD
 
 API secret:
-6PYm3BH45/VIBmVIM/48v6GzArvkzCD0aUpjfKAnF7vmscTAqBhrH0iwBPrA5Mtj
+S8D9svNaMYPGGzEAIDuxlMKqFO+myBMQ+Hs/CEZVKxoWS4NOIodB8yfOvJF1Hty5
